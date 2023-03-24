@@ -7,10 +7,9 @@ task mafft {
     Int disk_size = 100
   }
   command <<<
-    # date and version control
+    ## date and version control
     date | tee DATE
-    mafft_vers=$(mafft --version)
-    echo Mafft $(mafft_vers) | tee VERSION
+    echo "MAFFT $(mafft --version 2>&1 | grep v )" | tee VERSION
 
     cat ~{sep=" " genomes} | sed 's/Consensus_//;s/.consensus_threshold.*//' > assemblies.fasta
     mafft --thread -~{cpu} assemblies.fasta > msa.fasta
