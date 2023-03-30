@@ -7,10 +7,11 @@ task mafft {
     Int disk_size = 100
   }
   command <<<
-    ## date and version control
+    # date and version control
     date | tee DATE
     echo "MAFFT $(mafft --version 2>&1 | grep v )" | tee VERSION
 
+    # concatenate assemblies and align
     cat ~{sep=" " genomes} | sed 's/Consensus_//;s/.consensus_threshold.*//' > assemblies.fasta
     mafft --thread -~{cpu} assemblies.fasta > msa.fasta
   >>>
@@ -23,8 +24,8 @@ task mafft {
     docker: "quay.io/staphb/mafft:7.450"
     memory: "32 GB"
     cpu: cpu
-    disks:  "local-disk " + disk_size + " SSD"
-    disk: disk_size + " GB" # TES
+    disks: "local-disk " + disk_size + " SSD"
+    disk: disk_size + " GB"
     preemptible: 0
     maxRetries: 3
   }

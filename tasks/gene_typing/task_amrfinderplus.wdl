@@ -17,15 +17,15 @@ task amrfinderplus_nuc {
     Boolean hide_point_mutations = false
   }
   command <<<
-    # logging info
+    # date and version control
     date | tee DATE
     amrfinder --version | tee AMRFINDER_VERSION
     
     # capture the database version; strip out unnecessary output, remove "Database version: " that prints in front of the actual database version
     amrfinder --database_version 2>/dev/null | grep "Database version" | sed 's|Database version: ||' | tee AMRFINDER_DB_VERSION
 
-    ### set $amrfinder_organism BASH variable based on gambit_predicted_taxon or user-defined input string
-    ### final variable has strict syntax/spelling based on list from amrfinder --list_organisms
+    # set $amrfinder_organism BASH variable based on gambit_predicted_taxon or user-defined input string
+    # final variable has strict syntax/spelling based on list from amrfinder --list_organisms
     # there may be other Acinetobacter species to add later, like those in the A. baumannii-calcoaceticus species complex
     if [[ "~{organism}" == *"Acinetobacter"*"baumannii"* ]]; then
       amrfinder_organism="Acinetobacter_baumannii"
@@ -68,7 +68,7 @@ task amrfinderplus_nuc {
       echo "Skipping the use of amrfinder --organism optional parameter."
     fi
 
-    # checking bash variable
+    # checking amrfinder_organism variable
     echo "amrfinder_organism is set to:" ${amrfinder_organism}
     
     # if amrfinder_organism variable is set, use --organism flag, otherwise do not use --organism flag
@@ -164,7 +164,7 @@ task amrfinderplus_nuc {
     memory: "8 GB"
     cpu: cpu
     docker: docker
-    disks:  "local-disk " + disk_size + " SSD"
+    disks: "local-disk " + disk_size + " SSD"
     disk: disk_size + " GB"
     preemptible: 0
     maxRetries: 3

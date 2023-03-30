@@ -19,14 +19,15 @@ task bakta {
     String? bakta_opts
   }
   command <<<
+  # date and version control
   date | tee DATE
   bakta --version | tee BAKTA_VERSION
   
-  # Extract Bakta DB
+  # extract Bakta DB
   mkdir db
   time tar xzvf ~{bakta_db} --strip-components=1 -C ./db
 
-  # Install amrfinderplus db
+  # update amrfinderplus db
   amrfinder_update --database db/amrfinderplus-db
   amrfinder --database_version | tee AMRFINDER_DATABASE_VERSION
 
@@ -43,7 +44,6 @@ task bakta {
   
   # rename gff3 to gff for compatibility with downstream analysis (pirate)
   mv "~{samplename}/~{samplename}.gff3" "~{samplename}/~{samplename}.gff"
-  
   >>>
   output {
     File bakta_embl = "~{samplename}/~{samplename}.embl"
@@ -62,7 +62,7 @@ task bakta {
     memory: "~{memory} GB"
     cpu: cpu
     docker: docker
-    disks:  "local-disk " + disk_size + " SSD"
+    disks: "local-disk " + disk_size + " SSD"
     disk: disk_size + " GB"
     maxRetries: 3
   }

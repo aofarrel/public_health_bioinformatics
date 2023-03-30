@@ -20,15 +20,13 @@ task consensus {
       # setup custom primer scheme (/V is required by Artic)
       mkdir -p ./primer-schemes/HIV/Vuser
 
-      ## set reference genome
+      # set reference genome
       ref_genome="~{reference_genome}"
 
       head -n1 "${ref_genome}" | sed 's/>//' | tee REFERENCE_GENOME
       cp "${ref_genome}" ./primer-schemes/HIV/Vuser/HIV.reference.fasta
 
-      ## set primers
-      #cp ~{primer_bed} ./primer-schemes/SARS-CoV-2/Vuser/SARS-CoV-2.scheme.bed
-      #p_bed="~{primer_bed}"
+      # set primers
       cp "~{primer_bed}" ./primer-schemes/HIV/Vuser/HIV.scheme.bed
       scheme_name="HIV/Vuser"
     # Add other viruses here
@@ -37,7 +35,7 @@ task consensus {
       # setup custom primer scheme (/V is required by Artic)
       mkdir -p ./primer-schemes/SARS-CoV-2/Vuser
 
-      ## set reference genome
+      # set reference genome
       if [[ ! -z "~{reference_genome}" ]]; then
         ref_genome="~{reference_genome}"
       else
@@ -52,7 +50,7 @@ task consensus {
       head -n1 "${ref_genome}" | sed 's/>//' | tee REFERENCE_GENOME
       cp "${ref_genome}" ./primer-schemes/SARS-CoV-2/Vuser/SARS-CoV-2.reference.fasta
 
-      ## set primers
+      # set primers
       cp ~{primer_bed} ./primer-schemes/SARS-CoV-2/Vuser/SARS-CoV-2.scheme.bed
       scheme_name="SARS-CoV-2/Vuser"
     fi
@@ -60,7 +58,15 @@ task consensus {
     # version control
     echo "Medaka via $(artic -v)" | tee VERSION
     echo "~{primer_name}" | tee PRIMER_NAME
-    artic minion --medaka --medaka-model ~{medaka_model} --normalise ~{normalise} --threads ~{cpu} --scheme-directory ./primer-schemes --read-file ~{filtered_reads} ${scheme_name} ~{samplename}
+
+    # running medaka
+    artic minion \
+      --medaka \
+      --medaka-model ~{medaka_model} \
+      --normalise ~{normalise} \
+      --threads ~{cpu} \
+      --scheme-directory ./primer-schemes \
+      --read-file ~{filtered_reads} ${scheme_name} ~{samplename}
     gunzip -f ~{samplename}.pass.vcf.gz
 
     # clean up fasta header
@@ -87,8 +93,8 @@ task consensus {
     docker: "~{docker}"
     memory: "16 GB"
     cpu: cpu
-    disks:  "local-disk " + disk_size + " SSD"
-    disk: disk_size + " GB" # TES
+    disks: "local-disk " + disk_size + " SSD"
+    disk: disk_size + " GB"
     preemptible: 0
     maxRetries: 3
   }

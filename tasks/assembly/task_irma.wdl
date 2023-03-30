@@ -14,24 +14,30 @@ task irma {
     Int disk_size = 100
   }
   command <<<
+    # date
     date | tee DATE
-    #capture reads as bash variables
+
+    # capture reads as bash variables
     read1=~{read1}
     read2=~{read2}
+    
     # set cat command based on compression
     if [[ "~{read1}" == *".gz" ]] ; then
       cat_reads="zcat"
     else
       cat_reads="cat"
     fi
+
     # capture irma vesion
     IRMA | head -n1 | awk -F' ' '{ print "IRMA " $5 }' | tee VERSION
+
     # set config if needed
     if ~{keep_ref_deletions}; then 
       touch irma_config.sh
       echo 'DEL_TYPE="NNN"' >> irma_config.sh
       echo 'ALIGN_PROG="BLAT"' >> irma_config.sh
     fi
+
     # format reads, if needed
     read_header=$(${cat_reads} ~{read1} | head -n1)
     if ! [[ "${read_header}" =~ @(.+?)[_[:space:]][123]:.+ ]]; then
@@ -45,8 +51,10 @@ task irma {
     else
       echo "Read headers match IRMA formatting requirements"
     fi
+
     # run IRMA 
     IRMA "~{irma_module}" "${read1}" "${read2}" ~{samplename}
+
     # capture IRMA type
     if compgen -G "~{samplename}/*fasta"; then
       echo "Type_"$(basename "$(echo "$(find ~{samplename}/*.fasta | head -n1)")" | cut -d_ -f1) > IRMA_TYPE
@@ -55,12 +63,14 @@ task irma {
     else
       echo "No IRMA assembly generated for flu type prediction" >> IRMA_TYPE
     fi
+
     # rename IRMA outputs
     for irma_out in ~{samplename}/*{.vcf,.fasta,.bam}; do
       new_name="~{samplename}_"$(basename "${irma_out}" | cut -d "_" -f2- )
       echo "New name: ${new_name}; irma_out: ${irma_out}"
       mv "${irma_out}" "${new_name}"
     done
+
     # capture type A subtype
     if compgen -G "~{samplename}_HA*.fasta"; then # check if HA segment exists
       if [[ "$(ls ~{samplename}_HA*.fasta)" == *"HA_H"* ]]; then # if so, grab H-type if one is identified in assembly header
@@ -97,7 +107,7 @@ task irma {
     docker: "~{docker}"
     memory: "~{memory} GB"
     cpu: cpu
-    disks:  "local-disk " + disk_size + " SSD"
+    disks: "local-disk " + disk_size + " SSD"
     disk: disk_size + " GB"
     maxRetries: 3
     preemptible:  0

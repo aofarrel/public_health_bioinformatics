@@ -15,7 +15,7 @@ task bwa {
     echo "BWA $(bwa 2>&1 | grep Version )" | tee BWA_VERSION
     samtools --version | head -n1 | tee SAMTOOLS_VERSION
 
-    # set reference genome
+    # set and index reference genome
     if [[ ! -z "~{reference_genome}" ]]; then
       echo "User reference identified; ~{reference_genome} will be utilized for alignement"
       ref_genome="~{reference_genome}"
@@ -25,13 +25,14 @@ task bwa {
       ref_genome="/artic-ncov2019/primer_schemes/nCoV-2019/V3/nCoV-2019.reference.fasta"  
     fi
 
-    # Map with BWA MEM
+    # map reads with BWA MEM
     echo "Running bwa mem -t ~{cpu} ${ref_genome} ~{read1} ~{read2} | samtools sort | samtools view -F 4 -o ~{samplename}.sorted.bam "
     bwa mem \
-    -t ~{cpu} \
-    "${ref_genome}" \
-    ~{read1} ~{read2} |\
-    samtools sort | samtools view -F 4 -o ~{samplename}.sorted.bam
+      -t ~{cpu} \
+      "${ref_genome}" \
+      ~{read1} ~{read2} |\
+    samtools sort |\
+    samtools view -F 4 -o ~{samplename}.sorted.bam
 
     if [[ ! -z "~{read2}" ]]; then
       echo "processing paired reads"
@@ -40,7 +41,6 @@ task bwa {
       echo "processing single-end reads"
       samtools fastq -F4 ~{samplename}.sorted.bam | gzip > ~{samplename}_R1.fastq.gz
     fi
-
 
     # index BAMs
     samtools index ~{samplename}.sorted.bam
@@ -57,7 +57,7 @@ task bwa {
     docker: "quay.io/staphb/ivar:1.3.1-titan"
     memory: "8 GB"
     cpu: cpu
-    disks:  "local-disk " + disk_size + " SSD"
+    disks: "local-disk " + disk_size + " SSD"
     disk: disk_size + " GB" # TES
     preemptible: 0
     #maxRetries: 3

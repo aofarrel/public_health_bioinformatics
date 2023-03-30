@@ -15,11 +15,13 @@ task abricate {
     String docker = "quay.io/staphb/abricate:1.0.1-abaum-plasmid"
   }
   command <<<
+    # date and version control
     date | tee DATE
     abricate -v | tee ABRICATE_VERSION
     abricate --list
     abricate --check
     
+    # run abricate
     abricate \
       --db ~{database} \
       ~{'--minid ' + minid} \
@@ -50,7 +52,7 @@ task abricate {
     memory: "8 GB"
     cpu: cpu
     docker: docker
-    disks:  "local-disk " + disk_size + " SSD"
+    disks: "local-disk " + disk_size + " SSD"
     disk: disk_size + " GB"
   }
 }
@@ -75,8 +77,10 @@ task abricate_flu {
     Int disk_size = 100
   }
   command <<<
+    # date and version control
     date | tee DATE    
     abricate -v | tee ABRICATE_VERSION
+
     # run abricate
     abricate \
       --db ~{database} \
@@ -87,7 +91,7 @@ task abricate_flu {
       ~{assembly} > ~{samplename}_abricate_hits.tsv
 
     # capturing flu type (A or B based on M1 hit) and subtype (e.g. H1 and N1 based on HA/NA hits)
-    ## awk for gene column ($6) to grab subtype ($15)
+    # awk for gene column ($6) to grab subtype ($15)
     cat ~{samplename}_abricate_hits.tsv | awk -F '\t' '{if ($6=="M1") print $15}' > FLU_TYPE
     HA_hit=$(cat ~{samplename}_abricate_hits.tsv | awk -F '\t' '{if ($6=="HA") print $15 }')
     NA_hit=$(cat ~{samplename}_abricate_hits.tsv | awk -F '\t' '{if ($6=="NA") print $15 }')

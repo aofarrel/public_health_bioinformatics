@@ -33,18 +33,18 @@ task consensus {
     
     # call consensus
     samtools mpileup \
-    ~{true = "--count-orphans" false = "" count_orphans} \
-    -d ~{max_depth} \
-    ~{true = "--no-BAQ" false = "" disable_baq} \
-    -Q ~{min_bq} \
-    --reference ${ref_genome} \
-    ~{bamfile} | \
+      ~{true = "--count-orphans" false = "" count_orphans} \
+      -d ~{max_depth} \
+      ~{true = "--no-BAQ" false = "" disable_baq} \
+      -Q ~{min_bq} \
+      --reference ${ref_genome} \
+      ~{bamfile} | \
     ivar consensus \
-    -p ~{samplename}.consensus \
-    -q ~{min_qual} \
-    -t ~{min_freq} \
-    -m ~{consensus_min_depth} \
-    -n ~{char_unknown}
+      -p ~{samplename}.consensus \
+      -q ~{min_qual} \
+      -t ~{min_freq} \
+      -m ~{consensus_min_depth} \
+      -n ~{char_unknown}
 
     # clean up fasta header
     echo ">~{samplename}" > ~{samplename}.ivar.consensus.fasta
@@ -60,8 +60,8 @@ task consensus {
     docker: "quay.io/staphb/ivar:1.3.1-titan"
     memory: "8 GB"
     cpu: 2
-    disks:  "local-disk " + disk_size + " SSD"
-    disk: disk_size + " GB" # TES
+    disks: "local-disk " + disk_size + " SSD"
+    disk: disk_size + " GB"
     preemptible: 0
     maxRetries: 3
   }

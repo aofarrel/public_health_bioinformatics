@@ -21,7 +21,7 @@ task variant_call {
     ivar version | head -n1 | tee IVAR_VERSION
     samtools --version | head -n1 | tee SAMTOOLS_VERSION
 
-    # set reference genome
+    # set and index reference genome
     if [[ ! -z "~{reference_genome}" ]]; then
       echo "User reference identified; ~{reference_genome} will be utilized for alignement"
       ref_genome="~{reference_genome}"
@@ -31,7 +31,7 @@ task variant_call {
       ref_genome="/artic-ncov2019/primer_schemes/nCoV-2019/V3/nCoV-2019.reference.fasta"  
     fi
     
-    # set reference gff
+    # set reference GFF
     if [[ ! -z "~{reference_gff}" ]]; then
       echo "User reference identified; ~{reference_genome} will be utilized for alignement"
       ref_gff="~{reference_gff}"
@@ -42,21 +42,21 @@ task variant_call {
     
     # call variants
     samtools mpileup \
-    ~{true = "-A" false = "" count_orphans} \
-    -d ~{max_depth} \
-    ~{true = "-B" false = "" disable_baq} \
-    -Q ~{min_bq} \
-    --reference ${ref_genome} \
-    ~{bamfile} | \
+      ~{true = "-A" false = "" count_orphans} \
+      -d ~{max_depth} \
+      ~{true = "-B" false = "" disable_baq} \
+      -Q ~{min_bq} \
+      --reference ${ref_genome} \
+      ~{bamfile} | \
     ivar variants \
-    -p ~{samplename}.variants \
-    -q ~{min_qual} \
-    -t ~{min_freq} \
-    -m ~{variant_min_depth} \
-    -r ${ref_genome} \
-    -g ${ref_gff}
+      -p ~{samplename}.variants \
+      -q ~{min_qual} \
+      -t ~{min_freq} \
+      -m ~{variant_min_depth} \
+      -r ${ref_genome} \
+      -g ${ref_gff}
 
-    # Convert TSV to VCF
+    # convert TSV to VCF
     ivar_variants_to_vcf.py ~{samplename}.variants.tsv ~{samplename}.variants.vcf
 
     variants_num=$(grep "TRUE" ~{samplename}.variants.tsv | wc -l)
@@ -75,8 +75,8 @@ task variant_call {
     docker: "quay.io/staphb/ivar:1.3.1-titan"
     memory: "8 GB"
     cpu: 2
-    disks:  "local-disk " + disk_size + " SSD"
-    disk: disk_size + " GB" # TES
+    disks: "local-disk " + disk_size + " SSD"
+    disk: disk_size + " GB"
     preemptible: 0
     maxRetries: 3
   }

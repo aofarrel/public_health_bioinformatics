@@ -18,15 +18,13 @@ task primer_trim {
 
     # trimming primers
     ivar trim \
-    ~{true="-e" false="" keep_noprimer_reads} \
-    -i ~{bamfile} \
-    -b ~{primer_bed} \
-    -p ~{samplename}.primertrim | tee IVAR_OUT
+      ~{true="-e" false="" keep_noprimer_reads} \
+      -i ~{bamfile} \
+      -b ~{primer_bed} \
+      -p ~{samplename}.primertrim | tee IVAR_OUT
 
     # sorting and indexing the trimmed bams
-    samtools sort \
-    ~{samplename}.primertrim.bam \
-    -o ~{samplename}.primertrim.sorted.bam
+    samtools sort ~{samplename}.primertrim.bam -o ~{samplename}.primertrim.sorted.bam
 
     samtools index ~{samplename}.primertrim.sorted.bam
 
@@ -48,8 +46,8 @@ task primer_trim {
     docker: "quay.io/staphb/ivar:1.3.1-titan"
     memory:"8 GB"
     cpu: 2
-    disks:  "local-disk " + disk_size + " SSD"
-    disk: disk_size + " GB" # TES
+    disks: "local-disk " + disk_size + " SSD"
+    disk: disk_size + " GB"
     preemptible: 0
     maxRetries: 3
   }

@@ -7,20 +7,6 @@ task shovill_pe {
     String samplename
     String docker = "quay.io/staphb/shovill:1.1.0"
     Int disk_size = 100
-
-    ## SHOVILL optional parameters
-    ##  --depth [INT]           Sub-sample --R1/--R2 to this depth. Disable with --depth 0 (default: 150)
-    ##  --gsize [STRING]        Estimated genome size eg. 3.2M <blank=AUTODETECT> (default: '')
-    ##  --minlen [INT]          Minimum contig length <0=AUTO> (default: 0)
-    ##  --mincov [FLOAT]        Minimum contig coverage <0=AUTO> (default: 2)
-    ##  --assembler [STRING]    Assembler: skesa velvet megahit spades (default: 'spades')
-    ##  --opts [STRING]         Extra assembler options in quotes eg. spades: "--untrusted-contigs locus.fna" ... (default: '')
-    ##  --kmers [STRING]        K-mers to use <blank=AUTO> (default: '')
-    ##  --trim [BOOLEAN]        Enable adaptor trimming (default: OFF)
-    ##  --noreadcorr [BOOLEAN]  Disable read error correction (default: OFF)
-    ##  --nostitch [BOOLEAN]    Disable read stitching (default: OFF)
-    ##  --nocorr [BOOLEAN]      Disable post-assembly correction (default: OFF)
-    
     Int? depth
     String? genome_size
     Int min_contig_length = 200
@@ -34,22 +20,36 @@ task shovill_pe {
     Boolean nocorr = false
   }
   command <<<
+    # version control
     shovill --version | head -1 | tee VERSION
+
+    ## SHOVILL optional parameters
+    ##  --depth [INT]           Sub-sample --R1/--R2 to this depth. Disable with --depth 0 (default: 150)
+    ##  --gsize [STRING]        Estimated genome size eg. 3.2M <blank=AUTODETECT> (default: '')
+    ##  --minlen [INT]          Minimum contig length <0=AUTO> (default: 0)
+    ##  --mincov [FLOAT]        Minimum contig coverage <0=AUTO> (default: 2)
+    ##  --assembler [STRING]    Assembler: skesa velvet megahit spades (default: 'spades')
+    ##  --opts [STRING]         Extra assembler options in quotes eg. spades: "--untrusted-contigs locus.fna" ... (default: '')
+    ##  --kmers [STRING]        K-mers to use <blank=AUTO> (default: '')
+    ##  --trim [BOOLEAN]        Enable adaptor trimming (default: OFF)
+    ##  --noreadcorr [BOOLEAN]  Disable read error correction (default: OFF)
+    ##  --nostitch [BOOLEAN]    Disable read stitching (default: OFF)
+    ##  --nocorr [BOOLEAN]      Disable post-assembly correction (default: OFF)
     shovill \
-    --outdir out \
-    --R1 ~{read1_cleaned} \
-    --R2 ~{read2_cleaned} \
-    --minlen ~{min_contig_length} \
-    ~{'--depth ' + depth} \
-    ~{'--gsize ' + genome_size} \
-    ~{'--mincov ' + min_coverage} \
-    ~{'--assembler ' + assembler} \
-    ~{'--opts ' + assembler_options} \
-    ~{'--kmers ' + kmers} \
-    ~{true='--trim' false='' trim} \
-    ~{true='--noreadcorr' false='' noreadcorr} \
-    ~{true='--nostitch' false='' nostitch} \
-    ~{true='--nocorr' false='' nocorr}
+      --outdir out \
+      --R1 ~{read1_cleaned} \
+      --R2 ~{read2_cleaned} \
+      --minlen ~{min_contig_length} \
+      ~{'--depth ' + depth} \
+      ~{'--gsize ' + genome_size} \
+      ~{'--mincov ' + min_coverage} \
+      ~{'--assembler ' + assembler} \
+      ~{'--opts ' + assembler_options} \
+      ~{'--kmers ' + kmers} \
+      ~{true='--trim' false='' trim} \
+      ~{true='--noreadcorr' false='' noreadcorr} \
+      ~{true='--nostitch' false='' nostitch} \
+      ~{true='--nocorr' false='' nocorr}
 
     mv out/contigs.fa out/~{samplename}_contigs.fasta
 
@@ -60,7 +60,6 @@ task shovill_pe {
     elif [ "~{assembler}" == "velvet" ] ; then
       mv out/contigs.LastGraph out/~{samplename}_contigs.LastGraph
     fi
-    
   >>>
   output {
     File assembly_fasta = "out/~{samplename}_contigs.fasta"
@@ -73,7 +72,7 @@ task shovill_pe {
     docker: "~{docker}"
     memory: "16 GB"
     cpu: 4
-    disks:  "local-disk " + disk_size + " SSD"
+    disks: "local-disk " + disk_size + " SSD"
     disk: disk_size + " GB"
     maxRetries: 3
     preemptible: 0
@@ -86,19 +85,6 @@ task shovill_se {
     String samplename
     String docker = "quay.io/staphb/shovill-se:1.1.0"
     Int disk_size = 100
-
-    ## SHOVILL optional parameters
-    ##  --depth [INT]           Sub-sample --R1/--R2 to this depth. Disable with --depth 0 (default: 150)
-    ##  --gsize [STRING]        Estimated genome size eg. 3.2M <blank=AUTODETECT> (default: '')
-    ##  --minlen [INT]          Minimum contig length <0=AUTO> (default: 0)
-    ##  --mincov [FLOAT]        Minimum contig coverage <0=AUTO> (default: 2)
-    ##  --assembler [STRING]    Assembler: skesa velvet megahit spades (default: 'spades')
-    ##  --opts [STRING]         Extra assembler options in quotes eg. spades: "--untrusted-contigs locus.fna" ... (default: '')
-    ##  --kmers [STRING]        K-mers to use <blank=AUTO> (default: '')
-    ##  --trim [BOOLEAN]        Enable adaptor trimming (default: OFF)
-    ##  --noreadcorr [BOOLEAN]  Disable read error correction (default: OFF)
-    ##  --nocorr [BOOLEAN]      Disable post-assembly correction (default: OFF)
-
     Int? depth
     String? genome_size
     Int min_contig_length = 200
@@ -111,20 +97,33 @@ task shovill_se {
     Boolean nocorr = false
   }
   command <<<
+    # version control
     shovill-se --version | head -1 | tee VERSION
+
+    ## SHOVILL optional parameters
+    ##  --depth [INT]           Sub-sample --R1/--R2 to this depth. Disable with --depth 0 (default: 150)
+    ##  --gsize [STRING]        Estimated genome size eg. 3.2M <blank=AUTODETECT> (default: '')
+    ##  --minlen [INT]          Minimum contig length <0=AUTO> (default: 0)
+    ##  --mincov [FLOAT]        Minimum contig coverage <0=AUTO> (default: 2)
+    ##  --assembler [STRING]    Assembler: skesa velvet megahit spades (default: 'spades')
+    ##  --opts [STRING]         Extra assembler options in quotes eg. spades: "--untrusted-contigs locus.fna" ... (default: '')
+    ##  --kmers [STRING]        K-mers to use <blank=AUTO> (default: '')
+    ##  --trim [BOOLEAN]        Enable adaptor trimming (default: OFF)
+    ##  --noreadcorr [BOOLEAN]  Disable read error correction (default: OFF)
+    ##  --nocorr [BOOLEAN]      Disable post-assembly correction (default: OFF)
     shovill-se \
-    --outdir out \
-    --se ~{read1_cleaned} 
-    --minlen ~{min_contig_length} \
-    ~{'--depth ' + depth} \
-    ~{'--gsize ' + genome_size} \
-    ~{'--mincov ' + min_coverage} \
-    ~{'--assembler ' + assembler} \
-    ~{'--opts ' + assembler_options} \
-    ~{'--kmers ' + kmers} \
-    ~{true='--trim' false='' trim} \
-    ~{true='--noreadcorr' false='' noreadcorr} \
-    ~{true='--nocorr' false='' nocorr}
+      --outdir out \
+      --se ~{read1_cleaned} 
+      --minlen ~{min_contig_length} \
+      ~{'--depth ' + depth} \
+      ~{'--gsize ' + genome_size} \
+      ~{'--mincov ' + min_coverage} \
+      ~{'--assembler ' + assembler} \
+      ~{'--opts ' + assembler_options} \
+      ~{'--kmers ' + kmers} \
+      ~{true='--trim' false='' trim} \
+      ~{true='--noreadcorr' false='' noreadcorr} \
+      ~{true='--nocorr' false='' nocorr}
 
     mv out/contigs.fa out/~{samplename}_contigs.fasta
 
@@ -147,7 +146,7 @@ task shovill_se {
     docker: "~{docker}"
     memory: "16 GB"
     cpu: 4
-    disks:  "local-disk " + disk_size + " SSD"
+    disks: "local-disk " + disk_size + " SSD"
     disk: disk_size + " GB"
     maxRetries: 3
     preemptible: 0
