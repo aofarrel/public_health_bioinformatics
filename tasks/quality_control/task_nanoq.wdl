@@ -22,9 +22,9 @@ task nanoq {
     String version = read_string("VERSION")
   }
   runtime {
-    docker:  "~{docker}"
-    memory:  "2 GB"
-    cpu:   2
+    docker: docker
+    memory: "2 GB"
+    cpu: 2
     disks: "local-disk " + disk_size + " SSD"
     disk: disk_size + " GB"
     maxRetries: 3

@@ -11,7 +11,7 @@ task pirate {
     String? panopt # additional arguments to pass to pangenome_contruction
     Int memory = 32
     Int cpu = 4
-    String docker_image = "quay.io/biocontainers/pirate:1.0.5--hdfd78af_0"
+    String docker = "quay.io/biocontainers/pirate:1.0.5--hdfd78af_0"
     Int disk_size = 100
   }
   command <<<
@@ -66,10 +66,10 @@ task pirate {
     File? pirate_core_alignment_fasta = "PIRATE/~{cluster_name}_core_alignment.fasta" 
     File? pirate_core_alignment_gff = "PIRATE/~{cluster_name}_core_alignment.gff" 
     File? pirate_presence_absence_csv = "~{cluster_name}_gene_presence_absence.csv"
-    String pirate_docker_image = docker_image
+    String pirate_docker_image = docker
   } 
   runtime {
-    docker: "~{docker_image}"
+    docker: docker
     memory: "~{memory} GB"
     cpu: cpu
     disks: "local-disk " + disk_size + " SSD"

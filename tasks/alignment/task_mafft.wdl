@@ -5,6 +5,7 @@ task mafft {
     Array[File] genomes
     Int cpu = 16
     Int disk_size = 100
+    String docker = "quay.io/staphb/mafft:7.450"
   }
   command <<<
     # date and version control
@@ -21,7 +22,7 @@ task mafft {
     File msa = "msa.fasta"
   }
   runtime {
-    docker: "quay.io/staphb/mafft:7.450"
+    docker: docker
     memory: "32 GB"
     cpu: cpu
     disks: "local-disk " + disk_size + " SSD"

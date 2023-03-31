@@ -5,6 +5,7 @@ task stats_n_coverage {
     File bamfile
     String samplename
     Int disk_size = 100
+    String docker = "quay.io/staphb/samtools:1.15"
   }
   command <<<
     date | tee DATE
@@ -44,11 +45,11 @@ task stats_n_coverage {
     Float meanmapq = read_string("MEANMAPQ")
   }
   runtime {
-    docker: "quay.io/staphb/samtools:1.15"
+    docker: docker
     memory: "8 GB"
     cpu: 2
-    disks:  "local-disk " + disk_size + " SSD"
-    disk: disk_size + " GB" # TES
+    disks: "local-disk " + disk_size + " SSD"
+    disk: disk_size + " GB"
     preemptible: 0
     maxRetries: 3
   }

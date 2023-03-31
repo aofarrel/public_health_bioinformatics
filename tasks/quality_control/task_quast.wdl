@@ -35,7 +35,6 @@ task quast {
               gc_percent.write(line[1])       
 
     CODE
-
   >>>
   output {
     File quast_report = "${samplename}_report.tsv"
@@ -47,9 +46,9 @@ task quast {
     Float gc_percent = read_float("GC_PERCENT")    
   }
   runtime {
-    docker:  "~{docker}"
-    memory:  "2 GB"
-    cpu:   2
+    docker: docker
+    memory: "2 GB"
+    cpu: 2
     disks: "local-disk " + disk_size + " SSD"
     disk: disk_size + " GB"
     maxRetries: 3

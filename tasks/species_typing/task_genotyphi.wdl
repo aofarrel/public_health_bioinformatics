@@ -7,25 +7,25 @@ task genotyphi {
     File? read2
     Boolean ont_data = false
     String samplename
-    String genotyphi_docker_image = "quay.io/staphb/mykrobe:0.11.0"
+    String docker = "quay.io/staphb/mykrobe:0.11.0"
     Int disk_size = 100
     Int cpu = 4
   }
   command <<<
-    # Print and save versions
+    # version control
      mykrobe --version | sed 's|mykrobe v||g' | tee MYKROBE_VERSION
      # super ugly oneliner since "python /genotyphi/genotyphi.py --version" does NOT work due to python syntax error
      grep '__version__ =' /genotyphi/genotyphi.py | sed "s|__version__ = '||" | sed "s|'||" | tee GENOTYPHI_VERSION
 
     # Run Mykrobe on the input read data
     mykrobe predict \
-    -t ~{cpu} \
-    --sample ~{samplename} \
-    --species typhi \
-    --format json \
-    --out ~{samplename}.mykrobe_genotyphi.json \
-    ~{true='--ont' false='' ont_data} \
-    --seq ~{read1} ~{read2}
+      -t ~{cpu} \
+      --sample ~{samplename} \
+      --species typhi \
+      --format json \
+      --out ~{samplename}.mykrobe_genotyphi.json \
+      ~{true='--ont' false='' ont_data} \
+      --seq ~{read1} ~{read2}
 
     # use genotyphi script to produce TSV
     python /genotyphi/parse_typhi_mykrobe.py \
@@ -62,7 +62,7 @@ task genotyphi {
     String genotyphi_genotype_confidence = read_string("CONFIDENCE")
   }
   runtime {
-    docker: "~{genotyphi_docker_image}"
+    docker: docker
     memory: "8 GB"
     cpu: cpu
     disks: "local-disk " + disk_size + " SSD"

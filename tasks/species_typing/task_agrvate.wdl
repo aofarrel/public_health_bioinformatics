@@ -28,7 +28,7 @@ task agrvate {
     String agrvate_version = read_string("VERSION")
   }
   runtime {
-    docker: "~{docker}"
+    docker: docker
     memory: "8 GB"
     cpu: 4
     disks: "local-disk 50 SSD"

@@ -90,7 +90,7 @@ task consensus {
     File? trim_fastq = "~{samplename}.primertrimmed.rg.fastq"
   }
   runtime {
-    docker: "~{docker}"
+    docker: docker
     memory: "16 GB"
     cpu: cpu
     disks: "local-disk " + disk_size + " SSD"

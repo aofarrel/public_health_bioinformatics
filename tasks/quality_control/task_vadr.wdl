@@ -50,7 +50,6 @@ task vadr {
     else
       echo "VADR skipped due to poor assembly; assembly length (unambiguous) = ~{assembly_length_unambiguous}" > NUM_ALERTS
     fi
-
   >>>
   output {
     File? feature_tbl = "~{out_base}/~{out_base}.vadr.pass.tbl"
@@ -61,7 +60,7 @@ task vadr {
     String vadr_docker = docker
   }
   runtime {
-    docker: "~{docker}"
+    docker: docker
     memory: "8 GB"
     cpu: cpu
     dx_instance_type: "mem1_ssd1_v2_x2"

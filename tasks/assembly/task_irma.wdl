@@ -104,7 +104,7 @@ task irma {
     String irma_pipeline_date = read_string("DATE")
   }
   runtime {
-    docker: "~{docker}"
+    docker: docker
     memory: "~{memory} GB"
     cpu: cpu
     disks: "local-disk " + disk_size + " SSD"

@@ -9,7 +9,7 @@ task shigeifinder {
     Int cpu = 2
   }
   command <<<
-    # capture date
+    # date capture
     date | tee DATE
     # shigeifinder does not have a --version flag, relying upon the docker image tag for the version - which StaPH-B/Curtis maintains
     echo "~{docker}" | sed 's|staphb/shigeifinder:||' | tee VERSION.txt
@@ -17,10 +17,11 @@ task shigeifinder {
     # ShigEiFinder checks that all dependencies are installed before running
     echo "checking for shigeifinder dependencies and running ShigEiFinder..."
     # run shigeifinder on assembly; default is 4cpus, so turning down to 2 since it's already very fast
-    shigeifinder -i ~{assembly} \
-        -t ~{cpu} \
-        --hits \
-        --output ~{samplename}_shigeifinder.tsv
+    shigeifinder \
+      -i ~{assembly} \
+      -t ~{cpu} \
+      --hits \
+      --output ~{samplename}_shigeifinder.tsv
 
     # parse output TSV
     echo "Parsing ShigEiFinder output TSV..."
@@ -54,7 +55,6 @@ task shigeifinder {
     if [ "$(cat shigeifinder_notes.txt)" == "" ]; then
        echo "ShigEiFinder notes field was empty" > shigeifinder_notes.txt
     fi
-
   >>>
   output {
     File shigeifinder_report = "~{samplename}_shigeifinder.tsv"
@@ -69,7 +69,7 @@ task shigeifinder {
     String shigeifinder_notes = read_string("shigeifinder_notes.txt")
   }
   runtime {
-    docker: "~{docker}"
+    docker: docker
     memory: "8 GB"
     cpu: cpu
     disks: "local-disk " + disk_size + " SSD"
@@ -78,6 +78,7 @@ task shigeifinder {
     maxRetries: 3
   }
 }
+
 task shigeifinder_reads {
   input {
     File read1
@@ -89,7 +90,7 @@ task shigeifinder_reads {
     Boolean paired_end = true
   }
   command <<<
-    # capture date
+    # date capture
     date | tee DATE
     # shigeifinder does not have a --version flag, relying upon the docker image tag for the version - which StaPH-B/Curtis maintains
     echo "~{docker}" | sed 's|staphb/shigeifinder:||' | tee VERSION.txt
@@ -98,10 +99,10 @@ task shigeifinder_reads {
     echo "checking for shigeifinder dependencies and running ShigEiFinder..."
     # run shigeifinder on reads; default is 4cpus, so keeping at 4 since it's doing alignment
     shigeifinder -r -i ~{read1} ~{read2} \
-        ~{true='' false='--single_end' paired_end} \
-        -t ~{cpu} \
-        --hits \
-        --output ~{samplename}_shigeifinder.tsv
+      ~{true='' false='--single_end' paired_end} \
+      -t ~{cpu} \
+      --hits \
+      --output ~{samplename}_shigeifinder.tsv
 
     # parse output TSV
     echo "Parsing ShigEiFinder output TSV..."
@@ -150,7 +151,7 @@ task shigeifinder_reads {
     String shigeifinder_notes = read_string("shigeifinder_notes.txt")
   }
   runtime {
-    docker: "~{docker}"
+    docker: docker
     memory: "8 GB"
     cpu: cpu
     disks: "local-disk " + disk_size + " SSD"

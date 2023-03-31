@@ -62,7 +62,7 @@ task plasmidfinder {
   runtime {
     memory: "~{memory} GB"
     cpu: cpu
-    docker: "~{docker}"
+    docker: docker
     disks: "local-disk " + disk_size + " SSD"
     disk: disk_size + " GB"
     maxRetries: 3

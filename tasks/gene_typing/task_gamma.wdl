@@ -12,7 +12,6 @@ task gamma_one_sample {
     GAMMA.py ~{assembly_fasta} ~{gamma_database} ~{samplename}
     
     mv ~{samplename}.gamma ~{samplename}_gamma_report.tsv
-    
   >>>
   output {
     File gamma_results = "~{samplename}_gamma_report.tsv"
@@ -22,7 +21,7 @@ task gamma_one_sample {
   runtime {
     memory: "8 GB"
     cpu: 4
-    docker: "~{docker}"
+    docker: docker
     disks: "local-disk 100 HDD"
   }
 }

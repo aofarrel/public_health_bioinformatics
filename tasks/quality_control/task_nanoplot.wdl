@@ -6,9 +6,10 @@ task nanoplot {
     String samplename
     Int max_length = 100000
     Int disk_size = 100
+    String docker = "quay.io/staphb/nanoplot:1.40.0"
   }
   command <<<
-    # get version
+    # version control
     NanoPlot --version | tee "VERSION"
 
     # run nanoplot
@@ -26,14 +27,13 @@ task nanoplot {
       --loglength \
       --tsv_stats \
       --maxlength ~{max_length}
-   
   >>>
   output {
     File nanoplot_html = "~{samplename}_NanoPlot-report.html"
     String nanoplot_version = read_string("VERSION")
   }
   runtime {
-    docker: "quay.io/staphb/nanoplot:1.40.0"
+    docker: docker
     memory: "16 GB"
     cpu: 4
     disks: "local-disk " + disk_size + " SSD"

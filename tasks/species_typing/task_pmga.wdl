@@ -40,7 +40,7 @@ task pmga {
     File pmga_gff = "./pmga/~{samplename}.gff.gz"
   }
   runtime {
-    docker: "~{docker}"
+    docker: docker
     memory: "8 GB"
     cpu: 4
     disks: "local-disk 50 SSD"

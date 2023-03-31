@@ -6,6 +6,7 @@ task reorder_matrix {
     File matrix
     String cluster_name
     Int disk_size = 100
+    String docker = "quay.io/staphb/mykrobe:0.12.1" # used because it contains both biopython and pandas
   }
   command <<<
     # removing any "_contigs" suffixes from the tree and matrix
@@ -55,7 +56,7 @@ task reorder_matrix {
     File tree = "~{cluster_name}_tree.nwk"
   }
   runtime {
-    docker: "quay.io/staphb/mykrobe:0.12.1" # used because it contains both biopython and pandas
+    docker: docker
     memory: "2 GB"
     cpu: 2
     disks: "local-disk " + disk_size + " SSD"

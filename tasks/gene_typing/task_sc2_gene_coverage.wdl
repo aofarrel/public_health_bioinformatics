@@ -8,6 +8,7 @@ task sc2_gene_coverage {
     Int s_gene_stop = 25384
     Int min_depth
     Int disk_size = 100
+    String docker = "quay.io/staphb/samtools:1.15"
   }
   command <<<
     samtools index ~{bamfile}
@@ -67,11 +68,11 @@ task sc2_gene_coverage {
     File sc2_all_genes_percent_coverage = "~{samplename}.percent_gene_coverage.tsv"
   }
   runtime {
-    docker: "quay.io/staphb/samtools:1.15"
+    docker: docker
     memory: "8 GB"
     cpu: 2
-    disks:  "local-disk " + disk_size + " SSD"
-    disk: disk_size + " GB" # TES
+    disks: "local-disk " + disk_size + " SSD"
+    disk: disk_size + " GB"
     preemptible: 0
     maxRetries: 3
   }

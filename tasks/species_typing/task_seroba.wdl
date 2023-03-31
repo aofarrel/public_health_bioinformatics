@@ -9,7 +9,7 @@ task seroba {
     Int disk_size = 100
   }
   command <<<
-    # grab version
+    # version capture
     seroba version > VERSION
 
     # database path will need to be changed if/when docker image is updated. 
@@ -37,7 +37,7 @@ task seroba {
     File? seroba_details = "~{samplename}/detailed_serogroup_info.txt"
   }
   runtime {
-    docker: "~{docker}"
+    docker: docker
     memory: "16 GB"
     cpu: 8
     disks: "local-disk " + disk_size + " SSD"

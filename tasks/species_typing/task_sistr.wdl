@@ -16,7 +16,10 @@ task sistr {
     Boolean use_full_cgmlst_db = false
   }
   command <<<
+    # version capture
     echo $(sistr --version 2>&1) | sed 's/^.*sistr_cmd //; s/ .*\$//' | tee VERSION
+
+    # run sistr
     sistr \
       --qc \
       ~{true="--use-full-cgmlst-db" false="" use_full_cgmlst_db} \
@@ -32,7 +35,6 @@ task sistr {
     
     # parse sistr TSV
     cut -f 15 ~{samplename}.tsv | tail -n 1 | tee PREDICTED_SEROTYPE
-    
   >>>
   output {
     File sistr_results = "~{samplename}.tsv"
@@ -43,7 +45,7 @@ task sistr {
     String sistr_predicted_serotype = read_string("PREDICTED_SEROTYPE")
   }
   runtime {
-    docker: "~{docker}"
+    docker: docker
     memory: "8 GB"
     cpu: 4
     disks: "local-disk " + disk_size + " SSD"

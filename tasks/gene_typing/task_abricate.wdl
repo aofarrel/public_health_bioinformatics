@@ -149,7 +149,7 @@ task abricate_flu {
     String nextclade_ds_tag_na = read_string("NEXTCLADE_DS_TAG_NA")
   }
   runtime {
-    docker: "~{docker}"
+    docker: docker
     memory: "~{memory} GB"
     cpu: cpu
     disks:  "local-disk " + disk_size + " SSD"

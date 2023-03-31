@@ -69,10 +69,10 @@ task pangolin4 {
     File pango_lineage_report = "~{samplename}.pangolin_report.csv"
   }
   runtime {
-    docker: "~{docker}"
+    docker: docker
     memory: "8 GB"
     cpu: 4
-    disks:  "local-disk " + disk_size + " SSD"
+    disks: "local-disk " + disk_size + " SSD"
     disk: disk_size + " GB" # TES
     preemptible: 0
     maxRetries: 3
@@ -139,7 +139,7 @@ task pangolin_update_log {
     docker: "quay.io/theiagen/utility:1.1"
     memory: "8 GB"
     cpu: 4
-    disks:  "local-disk " + disk_size + " SSD"
+    disks: "local-disk " + disk_size + " SSD"
     disk: disk_size + " GB" # TES
     preemptible: 0
     maxRetries: 3

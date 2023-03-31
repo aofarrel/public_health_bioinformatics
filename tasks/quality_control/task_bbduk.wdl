@@ -48,11 +48,11 @@ task bbduk {
     String pipeline_date = read_string("DATE")
   }
   runtime {
-    docker: "~{docker}"
+    docker: docker
     memory: "~{memory} GB"
     cpu: 4
-    disks:  "local-disk " + disk_size + " SSD"
-    disk: disk_size + " GB" # TES
+    disks: "local-disk " + disk_size + " SSD"
+    disk: disk_size + " GB"
     preemptible: 0
     maxRetries: 3
   }
@@ -98,15 +98,15 @@ task bbduk_se {
     File read1_clean = "${samplename}_1.clean.fastq.gz"
     File adapter_stats = "${samplename}.adapters.stats.txt"
     File phiX_stats = "${samplename}.phix.stats.txt"
-    String bbduk_docker   = docker
+    String bbduk_docker = docker
     String pipeline_date = read_string("DATE")
   }
   runtime {
-    docker: "~{docker}"
+    docker: docker
     memory: "~{memory} GB"
     cpu: 4
-    disks:  "local-disk " + disk_size + " SSD"
-    disk: disk_size + " GB" # TES
+    disks: "local-disk " + disk_size + " SSD"
+    disk: disk_size + " GB"
     preemptible: 0
     maxRetries: 3
   }

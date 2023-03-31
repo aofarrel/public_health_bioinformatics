@@ -143,7 +143,7 @@ task shovill_se {
     String shovill_version = read_string("VERSION")
   }
   runtime {
-    docker: "~{docker}"
+    docker: docker
     memory: "16 GB"
     cpu: 4
     disks: "local-disk " + disk_size + " SSD"

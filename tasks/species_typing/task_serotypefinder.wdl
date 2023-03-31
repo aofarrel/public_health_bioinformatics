@@ -50,7 +50,7 @@ task serotypefinder {
     String serotypefinder_serotype = read_string("STF_SEROTYPE")
   }
   runtime {
-    docker: "~{docker}"
+    docker: docker
     memory: "8 GB"
     cpu: 2
     disks: "local-disk " + disk_size + " SSD"

@@ -276,9 +276,9 @@ task nextstrain_ncov_defaults { # in use
     runtime {
         docker: docker
         memory: "1 GB"
-        cpu:   1
-        disks:  "local-disk " + disk_size + " HDD"
-        disk: disk_size + " GB" # TES
+        cpu: 1
+        disks: "local-disk " + disk_size + " HDD"
+        disk: disk_size + " GB"
         dx_instance_type: "mem1_ssd1_v2_x2"
         maxRetries: 2
     }
@@ -336,9 +336,9 @@ task nextstrain_deduplicate_sequences { # in use
     runtime {
         docker: docker
         memory: "7 GB"
-        cpu:   1
-        disks:  "local-disk " + disk_size + " LOCAL"
-        disk: disk_size + " GB" # TES
+        cpu: 1
+        disks: "local-disk " + disk_size + " LOCAL"
+        disk: disk_size + " GB"
         dx_instance_type: "mem2_ssd1_v2_x2"
         maxRetries: 2
     }
@@ -362,7 +362,7 @@ task mafft_one_chr_chunked { # in use
 
         String   docker = "quay.io/broadinstitute/viral-phylo:2.1.19.1"
         Int      mem_size = 32
-        Int      cpus = 96
+        Int      cpu = 96
         Int disk_size = 750
     }
     command <<<
@@ -412,8 +412,8 @@ task mafft_one_chr_chunked { # in use
 
         # GNU Parallel refresher:
         # ",," is the replacement string; values after ":::" are substituted where it appears
-        parallel --jobs "$(( $((~{cpus}/~{threads_per_job}))<1 ? 1 : $((~{cpus}/~{threads_per_job})) ))" -I ,, \
-          "mafft --6merpair --keeplength --preservecase --thread $(((~{threads_per_job}-1)%~{cpus}+1)) --addfragments ,, ~{basename}_ref.fasta > $(basename ,,).msa_chunk.fasta \
+        parallel --jobs "$(( $((~{cpu}/~{threads_per_job}))<1 ? 1 : $((~{cpu}/~{threads_per_job})) ))" -I ,, \
+          "mafft --6merpair --keeplength --preservecase --thread $(((~{threads_per_job}-1)%~{cpu}+1)) --addfragments ,, ~{basename}_ref.fasta > $(basename ,,).msa_chunk.fasta \
           " \
           ::: $(ls -1 sequences_mafft_one_chr_chunked_chunk_*.fasta)
 
@@ -440,9 +440,9 @@ task mafft_one_chr_chunked { # in use
     runtime {
         docker: docker
         memory: mem_size + " GB"
-        cpu :   cpus
-        disks:  "local-disk " + disk_size + " LOCAL"
-        disk: disk_size + " GB" # TES
+        cpu: cpu
+        disks: "local-disk " + disk_size + " LOCAL"
+        disk: disk_size + " GB"
         preemptible: 0
         dx_instance_type: "mem3_ssd1_v2_x36"
         maxRetries: 2
@@ -548,7 +548,7 @@ task draft_augur_tree { # in use
         File?   vcf_reference
         String? tree_builder_args
 
-        Int?    cpus
+        Int?    cpu
         String  docker = "nextstrain/base:build-20220111T004537Z"
         Int disk_size = 750
     }
@@ -577,7 +577,7 @@ task draft_augur_tree { # in use
     runtime {
         docker: docker
         memory: "32 GB"
-        cpu:    select_first([cpus, 64])
+        cpu:    select_first([cpu, 64])
         disks:  "local-disk " + disk_size + " LOCAL"
         disk: disk_size + " GB" # TES
         dx_instance_type: "mem1_ssd1_v2_x36"
@@ -1037,9 +1037,9 @@ task export_auspice_json { # in use
     runtime {
         docker: docker
         memory: "32 GB"
-        cpu :   4
-        disks:  "local-disk " + disk_size + " HDD"
-        disk: disk_size + " GB" # TES
+        cpu: 4
+        disks: "local-disk " + disk_size + " HDD"
+        disk: disk_size + " GB"
         dx_instance_type: "mem3_ssd1_v2_x4"
         preemptible: 0
         maxRetries: 2
@@ -1065,9 +1065,9 @@ task prep_augur_metadata { # in use
 
     String? iso_county=""
 
-    String    docker_image = "quay.io/theiagen/utility:1.1"
+    String    docker = "quay.io/theiagen/utility:1.1"
     Int       mem_size_gb = 3
-    Int       CPUs = 1
+    Int       cpu = 1
     Int       disk_size = 10
     Int       preemptible_tries = 0
   }
@@ -1087,12 +1087,12 @@ task prep_augur_metadata { # in use
     File     augur_metadata = "augur_metadata.tsv"
   }
   runtime {
-      docker:       docker_image
-      memory:       "~{mem_size_gb} GB"
-      cpu:          CPUs
-      disks:        "local-disk ~{disk_size} SSD"
-      disk: disk_size + " GB" # TES
-      preemptible:  preemptible_tries
+      docker: docker
+      memory: "~{mem_size_gb} GB"
+      cpu: cpu
+      disks: "local-disk ~{disk_size} SSD"
+      disk: disk_size + " GB"
+      preemptible: preemptible_tries
       maxRetries: 3
   }
 }

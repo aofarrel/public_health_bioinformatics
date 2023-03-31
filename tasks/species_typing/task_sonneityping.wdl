@@ -1,7 +1,6 @@
 version 1.0
 
 task sonneityping {
-  # Inputs
   input {
     File read1
     File? read2
@@ -13,26 +12,26 @@ task sonneityping {
     Int cpu = 4
   }
   command <<<
-    # Print and save versions
+    # version capture
      mykrobe --version | sed 's|mykrobe v||g' | tee MYKROBE_VERSION.txt
     # opting to skip capturing the sonneityping version since there is no --version flag or easy way to determine version
     # navigate here for docker image and version information: https://github.com/StaPH-B/docker-builds/tree/master/mykrobe
 
     # Run Mykrobe on the input read data
     mykrobe predict \
-    -t ~{cpu} \
-    --sample ~{samplename} \
-    --species sonnei \
-    --format json_and_csv \
-    --out ~{samplename}.mykrobe \
-    ~{true='--ont' false='' ont_data} \
-    --seq ~{read1} ~{read2} \
-    ~{myrkobe_opts}
+      -t ~{cpu} \
+      --sample ~{samplename} \
+      --species sonnei \
+      --format json_and_csv \
+      --out ~{samplename}.mykrobe \
+      ~{true='--ont' false='' ont_data} \
+      --seq ~{read1} ~{read2} \
+      ~{myrkobe_opts}
 
     # use sonneityping script to produce final TSV; alleles.txt is required input for human-readable genotype names
     python /sonneityping/parse_mykrobe_predict.py \
-    --jsons ~{samplename}.mykrobe.json --alleles /sonneityping/alleles.txt \
-    --prefix ~{samplename}.sonneityping
+      --jsons ~{samplename}.mykrobe.json --alleles /sonneityping/alleles.txt \
+      --prefix ~{samplename}.sonneityping
 
     # rename output TSV to something prettier
     mv -v ~{samplename}.sonneityping_predictResults.tsv ~{samplename}.sonneityping.tsv
@@ -69,7 +68,7 @@ task sonneityping {
     String sonneityping_genotype_name = read_string("GENOTYPE_NAME.txt")
   }
   runtime {
-    docker: "~{docker}"
+    docker: docker
     memory: "8 GB"
     cpu: cpu
     disks: "local-disk " + disk_size + " SSD"

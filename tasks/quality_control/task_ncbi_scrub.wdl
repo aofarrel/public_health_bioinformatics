@@ -53,11 +53,11 @@ task ncbi_scrub_pe {
     String ncbi_scrub_docker = docker
   }
   runtime {
-      docker: "~{docker}"
+      docker: docker
       memory: "8 GB"
       cpu: 4
-      disks:  "local-disk " + disk_size + " SSD"
-      disk: disk_size + " GB" # TES
+      disks: "local-disk " + disk_size + " SSD"
+      disk: disk_size + " GB"
       preemptible: 0
       maxRetries: 3
   }
@@ -96,11 +96,11 @@ task ncbi_scrub_se {
     String ncbi_scrub_docker = docker
   }
   runtime {
-    docker: "~{docker}"
+    docker: docker
     memory: "8 GB"
     cpu: 4
-    disks:  "local-disk " + disk_size + " SSD"
-    disk: disk_size + " GB" # TES
+    disks: "local-disk " + disk_size + " SSD"
+    disk: disk_size + " GB"
     preemptible: 0
     maxRetries: 3
   }

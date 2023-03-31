@@ -95,7 +95,7 @@ task cg_pipeline {
     Float est_coverage = read_float("EST_COVERAGE")
   }
   runtime {
-    docker: "~{docker}"
+    docker: docker
     memory: "8 GB"
     cpu: 4
     disks: "local-disk " + disk_size + " SSD"

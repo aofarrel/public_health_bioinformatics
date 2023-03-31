@@ -79,7 +79,7 @@ task dragonflye {
     String dragonflye_version = read_string("VERSION")
   }
   runtime {
-    docker: "~{docker}"
+    docker: docker
     memory: "16 GB"
     cpu: cpu
     disks: "local-disk " + disk_size + " SSD"

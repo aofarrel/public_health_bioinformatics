@@ -5,7 +5,7 @@ task kaptive {
   input {
     File assembly
     String samplename
-    String kaptive_docker_image = "quay.io/staphb/kaptive:2.0.3"
+    String docker = "quay.io/staphb/kaptive:2.0.3"
     Int disk_size = 100
     Int cpu = 4
     # Parameters
@@ -28,16 +28,16 @@ task kaptive {
     
     # Run Kaptive on the input assembly for the K locus
     kaptive.py \
-    -t ~{cpu} \
-    ~{'--start_end_margin ' + start_end_margin} \
-    ~{'--min_gene_id ' + min_identity} \
-    ~{'--min_gene_cov ' + min_coverage} \
-    ~{'--low_gene_id ' + low_gene_id} \
-    --no_seq_out \
-    --no_json \
-    --out ~{samplename}_kaptive_out_k \
-    --assembly ~{assembly} \
-    --k_refs ${KAPTIVE_DIR}/reference_database/Acinetobacter_baumannii_k_locus_primary_reference.gbk
+      -t ~{cpu} \
+      ~{'--start_end_margin ' + start_end_margin} \
+      ~{'--min_gene_id ' + min_identity} \
+      ~{'--min_gene_cov ' + min_coverage} \
+      ~{'--low_gene_id ' + low_gene_id} \
+      --no_seq_out \
+      --no_json \
+      --out ~{samplename}_kaptive_out_k \
+      --assembly ~{assembly} \
+      --k_refs ${KAPTIVE_DIR}/reference_database/Acinetobacter_baumannii_k_locus_primary_reference.gbk
     
     # parse outputs
     python3 <<CODE
@@ -166,7 +166,7 @@ task kaptive {
     String kaptive_oc_other_outside_genes = read_string("OTHER_GENES_OUT_LOCUS_OC")
   }
   runtime {
-    docker: "~{kaptive_docker_image}"
+    docker: docker
     memory: "8 GB"
     cpu: cpu
     disks: "local-disk " + disk_size + " SSD"

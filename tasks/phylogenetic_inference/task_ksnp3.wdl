@@ -7,7 +7,7 @@ task ksnp3 {
     String cluster_name
     Int kmer_size = 19
     String? ksnp3_args = "" # add -ML to calculate a maximum likelihood tree or -NJ to calculate a neighbor-joining tree
-    String docker_image = "quay.io/staphb/ksnp3:3.1"
+    String docker = "quay.io/staphb/ksnp3:3.1"
     Int memory = 8
     Int cpu = 4
     Int disk_size = 100
@@ -59,10 +59,10 @@ task ksnp3 {
     File? ksnp3_nj_tree = "ksnp3/~{cluster_name}_NJ.nwk"
     File number_snps = "ksnp3/COUNT_SNPs"
     Array[File] ksnp_outs = glob("ksnp3/*")
-    String ksnp3_docker_image = docker_image
+    String ksnp3_docker_image = docker
   }
   runtime {
-    docker: docker_image
+    docker: docker
     memory: "~{memory} GB"
     cpu: cpu
     disks: "local-disk ~{disk_size} SSD"

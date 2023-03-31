@@ -39,7 +39,7 @@ task meningotype {
     String meningotype_version = read_string("VERSION")
   }
   runtime {
-    docker: "~{docker}"
+    docker: docker
     memory: "8 GB"
     cpu: 2
     disks: "local-disk 50 SSD"

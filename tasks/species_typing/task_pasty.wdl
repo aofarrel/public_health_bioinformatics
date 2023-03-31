@@ -10,15 +10,15 @@ task pasty {
     Int disk_size = 100
   }
   command <<<
-    # date and version control
+    # date and version capture
     date | tee DATE
     pasty --version > VERSION && sed -i -e 's/pasty\, version //' VERSION  
     pasty \
-    --assembly ~{assembly} \
-    --min_pident ~{min_pident} \
-    --min_coverage ~{min_coverage} \
-    --prefix ~{samplename} \
-    --outdir .  
+      --assembly ~{assembly} \
+      --min_pident ~{min_pident} \
+      --min_coverage ~{min_coverage} \
+      --prefix ~{samplename} \
+      --outdir . 
     awk 'FNR==2' "~{samplename}.tsv" | cut -d$'\t' -f2 > SEROGROUP
     awk 'FNR==2' "~{samplename}.tsv" | cut -d$'\t' -f3 > COVERAGE
     awk 'FNR==2' "~{samplename}.tsv" | cut -d$'\t' -f4 > FRAGMENTS
@@ -37,7 +37,7 @@ task pasty {
     String pasty_comment = read_string("COMMENT")
   }
   runtime {
-    docker: "~{docker}"
+    docker: docker
     memory: "4 GB"
     cpu: 2
     disks: "local-disk " + disk_size + " SSD"

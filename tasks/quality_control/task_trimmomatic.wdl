@@ -19,13 +19,12 @@ task trimmomatic_pe {
     trimmomatic -version > VERSION && sed -i -e 's/^/Trimmomatic /' VERSION
 
     trimmomatic PE \
-    ~{trimmomatic_args} \
-    -threads ~{threads} \
-    ~{read1} ~{read2} \
-    -baseout ~{samplename}.fastq.gz \
-    SLIDINGWINDOW:~{trimmomatic_window_size}:~{trimmomatic_quality_trim_score} \
-    MINLEN:~{trimmomatic_minlen} &> ~{samplename}.trim.stats.txt
-
+      ~{trimmomatic_args} \
+      -threads ~{threads} \
+      ~{read1} ~{read2} \
+      -baseout ~{samplename}.fastq.gz \
+      SLIDINGWINDOW:~{trimmomatic_window_size}:~{trimmomatic_quality_trim_score} \
+      MINLEN:~{trimmomatic_minlen} &> ~{samplename}.trim.stats.txt
   >>>
   output {
     File read1_trimmed = "~{samplename}_1P.fastq.gz"
@@ -35,11 +34,11 @@ task trimmomatic_pe {
     String pipeline_date = read_string("DATE")
   }
   runtime {
-    docker: "~{docker}"
+    docker: docker
     memory: "8 GB"
     cpu: 4
-    disks:  "local-disk " + disk_size + " SSD"
-    disk: disk_size + " GB" # TES
+    disks: "local-disk " + disk_size + " SSD"
+    disk: disk_size + " GB"
     preemptible: 0
     maxRetries: 3
   }
@@ -63,12 +62,12 @@ task trimmomatic_se {
     trimmomatic -version > VERSION && sed -i -e 's/^/Trimmomatic /' VERSION
 
     trimmomatic SE \
-    ~{trimmomatic_args} \
-    -threads ~{threads} \
-    ~{read1} \
-    ~{samplename}_trimmed.fastq.gz \
-    SLIDINGWINDOW:~{trimmomatic_window_size}:~{trimmomatic_quality_trim_score} \
-    MINLEN:~{trimmomatic_minlen} > ~{samplename}.trim.stats.txt
+      ~{trimmomatic_args} \
+      -threads ~{threads} \
+      ~{read1} \
+      ~{samplename}_trimmed.fastq.gz \
+      SLIDINGWINDOW:~{trimmomatic_window_size}:~{trimmomatic_quality_trim_score} \
+      MINLEN:~{trimmomatic_minlen} > ~{samplename}.trim.stats.txt
   >>>
   output {
     File read1_trimmed = "~{samplename}_trimmed.fastq.gz"
@@ -77,11 +76,11 @@ task trimmomatic_se {
     String pipeline_date = read_string("DATE")
   }
   runtime {
-    docker: "~{docker}"
+    docker: docker
     memory: "8 GB"
     cpu: 4
-    disks:  "local-disk " + disk_size + " SSD"
-    disk: disk_size + " GB" # TES
+    disks: "local-disk " + disk_size + " SSD"
+    disk: disk_size + " GB"
     preemptible: 0
     maxRetries: 3
   }

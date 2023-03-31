@@ -34,7 +34,7 @@ task lissero {
     String lissero_serotype = read_string("SEROTYPE")
   }
   runtime {
-    docker: "~{docker}"
+    docker: docker
     memory: "8 GB"
     cpu: cpu
     disks: "local-disk " + disk_size + " SSD"

@@ -8,7 +8,7 @@ task snippy_variants {
     String? query_gene
     String samplename
     String docker = "quay.io/staphb/snippy:4.6.0"
-    Int cpus = 8
+    Int cpu = 8
     Int memory = 32
     # Paramters 
     # --map_qual: Minimum read mapping quality to consider (default '60')
@@ -43,7 +43,7 @@ task snippy_variants {
       --reference ~{reference} \
       --outdir ~{samplename} \
       ${reads} \
-      --cpus ~{cpus} \
+      --cpus ~{cpu} \
       --ram ~{memory} \
       --prefix ~{samplename} \
       ~{'--mapqual ' + map_qual} \
@@ -86,9 +86,9 @@ task snippy_variants {
     File snippy_variants_summary = "~{samplename}/~{samplename}.txt"
   }
   runtime {
-      docker: "~{docker}"
+      docker: docker
       memory: "~{memory} GB"
-      cpu: "~{cpus}"
+      cpu: cpu
       disks: "local-disk 100 SSD"
       preemptible: 0
       maxRetries: 3

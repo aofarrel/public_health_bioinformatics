@@ -50,8 +50,8 @@ task consensus_qc {
     docker: "quay.io/theiagen/utility:1.1"
     memory: "2 GB"
     cpu: 1
-    disks:  "local-disk " + disk_size + " SSD"
-    disk: disk_size + " GB" # TES
+    disks: "local-disk " + disk_size + " SSD"
+    disk: disk_size + " GB"
     preemptible: 0
   }
 }

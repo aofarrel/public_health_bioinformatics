@@ -50,14 +50,6 @@ task quasitools {
       -me ${read1_unzip} ${read2_unzip} \
       -o "~{samplename}"
   >>>
-  runtime {
-    docker: "~{docker}"
-      memory: "4 GB"
-      cpu: 4
-      disks: "local-disk 50 HDD"
-      dx_instance_type: "mem1_ssd1_v2_x2"
-      maxRetries: 3
-  }
   output {
     String quasitools_version = read_string("QUASITOOLS_VERSION")
     String quasitools_date = read_string("DATE")
@@ -65,5 +57,13 @@ task quasitools {
     File dr_report = "~{samplename}/dr_report.csv"
     File hydra_vcf = "~{samplename}/hydra.vcf"
     File mutations_report = "~{samplename}/mutation_report.aavf"
+  }
+  runtime {
+    docker: docker
+    memory: "4 GB"
+    cpu: 4
+    disks: "local-disk 50 HDD"
+    dx_instance_type: "mem1_ssd1_v2_x2"
+    maxRetries: 3
   }
 }

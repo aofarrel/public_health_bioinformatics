@@ -12,6 +12,7 @@ task check_reads {
     Int min_proportion
     Boolean skip_screen
     Int disk_size = 100
+    String docker = "quay.io/bactopia/gather_samples:2.0.2"
   }
   command <<<
     flag="PASS"
@@ -130,7 +131,7 @@ task check_reads {
     Int est_genome_length = read_int("EST_GENOME_LENGTH")
   }
   runtime {
-    docker: "quay.io/bactopia/gather_samples:2.0.2"
+    docker: docker
     memory: "2 GB"
     cpu: 2
     disks: "local-disk " + disk_size + " SSD"
@@ -150,6 +151,7 @@ task check_reads_se {
     Int min_coverage
     Boolean skip_screen 
     Int disk_size = 100
+    String docker = "quay.io/bactopia/gather_samples:2.0.2"
   }
   command <<<
     flag="PASS"
@@ -253,7 +255,7 @@ task check_reads_se {
     Int est_genome_length = read_int("EST_GENOME_LENGTH")
   }
   runtime {
-    docker: "quay.io/bactopia/gather_samples:2.0.2"
+    docker: docker
     memory: "2 GB"
     cpu: 2
     disks: "local-disk " + disk_size + " SSD"
@@ -273,6 +275,7 @@ task check_reads_ont {
     Int min_coverage
     Boolean skip_screen 
     Int disk_size = 100
+    String docker = "quay.io/bactopia/gather_samples:2.0.2"
   }
   command <<<
     flag="PASS"
@@ -373,7 +376,7 @@ task check_reads_ont {
     String read_screen = read_string("FLAG")
   }
   runtime {
-    docker: "quay.io/bactopia/gather_samples:2.0.2"
+    docker: docker
     memory: "2 GB"
     cpu: 2
     disks: "local-disk " + disk_size + " SSD"

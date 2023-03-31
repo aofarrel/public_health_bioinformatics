@@ -7,6 +7,7 @@ task primer_trim {
     File primer_bed
     Boolean keep_noprimer_reads = true
     Int disk_size = 100
+    String docker = "quay.io/staphb/ivar:1.3.1-titan"
   }
   String primer_name = basename(primer_bed)
   command <<<
@@ -43,8 +44,8 @@ task primer_trim {
     String primer_bed_name = read_string("PRIMER_NAME")
   }
   runtime {
-    docker: "quay.io/staphb/ivar:1.3.1-titan"
-    memory:"8 GB"
+    docker: docker
+    memory: "8 GB"
     cpu: 2
     disks: "local-disk " + disk_size + " SSD"
     disk: disk_size + " GB"

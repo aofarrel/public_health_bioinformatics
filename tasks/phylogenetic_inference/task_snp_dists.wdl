@@ -5,6 +5,7 @@ task snp_dists {
     File alignment
     String cluster_name
     Int disk_size = 100
+    String docker = "quay.io/staphb/snp-dists:0.8.2"
   }
   command <<<
     # date and version control
@@ -20,7 +21,7 @@ task snp_dists {
     File snp_matrix = "~{cluster_name}_snp_distance_matrix.tsv"
   }
   runtime {
-    docker: "quay.io/staphb/snp-dists:0.8.2"
+    docker: docker
     memory: "2 GB"
     cpu: 2
     disks: "local-disk " + disk_size + " SSD"

@@ -12,7 +12,7 @@ task busco {
     Boolean eukaryote = false
   }
   command <<<
-    # get version
+    # version control
     busco --version | tee "VERSION"
  
     # run busco
@@ -49,7 +49,7 @@ task busco {
     File? busco_report = "~{samplename}_busco-summary.txt"
   }
   runtime {
-    docker: "~{docker}"
+    docker: docker
     memory: "8 GB"
     cpu: 2
     disks: "local-disk " + disk_size + " SSD"

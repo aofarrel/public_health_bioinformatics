@@ -43,8 +43,8 @@ task compare_two_tsvs {
     docker: "quay.io/theiagen/utility:1.2"
     memory: "4 GB"
     cpu: 2
-    disks:  "local-disk " + disk_size + " HDD"
-    disk: disk_size + " GB" # TES
+    disks: "local-disk " + disk_size + " HDD"
+    disk: disk_size + " GB"
     dx_instance_type: "mem1_ssd1_v2_x2"
     maxRetries: 3
   }

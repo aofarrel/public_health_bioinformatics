@@ -5,7 +5,7 @@ task kleborate {
   input {
     File assembly
     String samplename
-    String kleborate_docker_image = "quay.io/staphb/kleborate:2.2.0"
+    String docker = "quay.io/staphb/kleborate:2.2.0"
     Int disk_size = 100
     
     # Parameters
@@ -114,7 +114,7 @@ task kleborate {
   output {
     File kleborate_output_file = "~{samplename}_kleborate_out.tsv"
     String kleborate_version = read_string("VERSION")
-    String kleborate_docker = kleborate_docker_image
+    String kleborate_docker_image = docker
     String kleborate_mlst_sequence_type = read_string("MLST_SEQUENCE_TYPE")
     String kleborate_virulence_score = read_string("VIRULENCE_SCORE")
     String kleborate_resistance_score = read_string("RESISTANCE_SCORE")
@@ -131,7 +131,7 @@ task kleborate {
     String kleborate_olocus_confidence = read_string("O_LOCUS_CONFIDENCE")
   }
   runtime {
-    docker: "~{kleborate_docker_image}"
+    docker: docker
     memory: "16 GB"
     cpu: 8
     disks: "local-disk " + disk_size + " SSD"

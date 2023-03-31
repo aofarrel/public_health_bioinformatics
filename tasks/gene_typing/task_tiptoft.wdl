@@ -53,7 +53,7 @@ task tiptoft {
     docker: docker
     memory: "8 GB"
     cpu: cpu
-    disks:  "local-disk " + disk_size + " SSD"
+    disks: "local-disk " + disk_size + " SSD"
     disk: disk_size + " GB" # TES
     preemptible: 0
     maxRetries: 3

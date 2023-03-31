@@ -37,11 +37,11 @@ task iqtree {
     File ml_tree = "~{cluster_name}_iqtree.tree"
   }
   runtime {
-    docker: "~{docker}"
+    docker: docker
     memory: "32 GB"
     cpu: 4
     disks: "local-disk " + disk_size + " SSD"
-    disk: disk_size + " GB" # TES    preemptible: 0
+    disk: disk_size + " GB"
     maxRetries: 3
   }
 }

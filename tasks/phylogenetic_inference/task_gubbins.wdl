@@ -44,7 +44,7 @@ task gubbins {
     File? gubbins_timetree_stats = "~{cluster_name}.lsd.out"
   }
   runtime {
-    docker: "~{docker}"
+    docker: docker
     memory: "32 GB"
     cpu: 4
     disks: "local-disk 100 SSD"

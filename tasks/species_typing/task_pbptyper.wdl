@@ -40,7 +40,7 @@ task pbptyper {
     String pbptyper_docker = docker
   }
   runtime {
-    docker: "~{docker}"
+    docker: docker
     memory: "16 GB"
     cpu: cpus
     disks: "local-disk " + disk_size + " SSD"

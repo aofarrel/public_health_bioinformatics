@@ -14,6 +14,7 @@ task variant_call {
     Float min_freq = "0.6"
     Int? variant_min_depth 
     Int disk_size = 100
+    String docker = "quay.io/staphb/ivar:1.3.1-titan"
   }
   command <<<
     # date and version control
@@ -72,7 +73,7 @@ task variant_call {
     String pipeline_date = read_string("DATE")
   }
   runtime {
-    docker: "quay.io/staphb/ivar:1.3.1-titan"
+    docker: docker
     memory: "8 GB"
     cpu: 2
     disks: "local-disk " + disk_size + " SSD"

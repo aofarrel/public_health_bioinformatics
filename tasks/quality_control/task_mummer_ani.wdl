@@ -71,7 +71,6 @@ task animummer {
         echo "Reference genome used for ANI is: ${REF_GENOME}"
       fi
     fi
-    
   >>>
   output {
     Float ani_highest_percent = read_float("ANI_HIGHEST_PERCENT")
@@ -81,9 +80,9 @@ task animummer {
     String ani_mummer_version = read_string("MUMMER_VERSION")
   }
   runtime {
-    docker:  "~{docker}"
-    memory:  "8 GB"
-    cpu:   4
+    docker: docker
+    memory: "8 GB"
+    cpu: 4
     disks: "local-disk " + disk_size + " SSD"
     disk: disk_size + " GB"
     maxRetries: 3

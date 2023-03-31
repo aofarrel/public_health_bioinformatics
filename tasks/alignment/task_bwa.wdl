@@ -8,6 +8,7 @@ task bwa {
     File? reference_genome
     Int cpu = 6
     Int disk_size = 100
+    String docker = "quay.io/staphb/ivar:1.3.1-titan"
   }
   command <<<
     # date and version control
@@ -54,11 +55,11 @@ task bwa {
     File? read2_aligned = "~{samplename}_R2.fastq.gz"
   }
   runtime {
-    docker: "quay.io/staphb/ivar:1.3.1-titan"
+    docker: docker
     memory: "8 GB"
     cpu: cpu
     disks: "local-disk " + disk_size + " SSD"
-    disk: disk_size + " GB" # TES
+    disk: disk_size + " GB"
     preemptible: 0
     #maxRetries: 3
   }

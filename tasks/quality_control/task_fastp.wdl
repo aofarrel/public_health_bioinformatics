@@ -19,10 +19,15 @@ task fastp_pe {
     date | tee DATE
 
     fastp \
-    --in1 ~{read1} --in2 ~{read2} \
-    --out1 ~{samplename}_1P.fastq.gz --out2 ~{samplename}_2P.fastq.gz \
-    --unpaired1 ~{samplename}_1U.fastq.gz --unpaired2 ~{samplename}_2U.fastq.gz \
-    --cut_right --cut_right_window_size ~{fastp_window_size} --cut_right_mean_quality ~{fastp_quality_trim_score} \
+    --in1 ~{read1} \
+    --in2 ~{read2} \
+    --out1 ~{samplename}_1P.fastq.gz \
+    --out2 ~{samplename}_2P.fastq.gz \
+    --unpaired1 ~{samplename}_1U.fastq.gz \
+    --unpaired2 ~{samplename}_2U.fastq.gz \
+    --cut_right \
+    --cut_right_window_size ~{fastp_window_size} \
+    --cut_right_mean_quality ~{fastp_quality_trim_score} \
     --length_required ~{fastp_minlen} \
     --thread ~{threads} \
     ~{fastp_args} \
@@ -34,11 +39,11 @@ task fastp_pe {
     File read1_trimmed_unpaired = "~{samplename}_1U.fastq.gz"
     File read2_trimmed_unpaired = "~{samplename}_2U.fastq.gz"
     File fastp_stats = "~{samplename}_fastp.html"
-    String version = "~{docker}"
+    String fastp_docker_image = "~{docker}"
     String pipeline_date = read_string("DATE")
   }
   runtime {
-    docker: "quay.io/staphb/fastp:0.23.2"
+    docker: docker
     memory: "8 GB"
     cpu: 4
     disks: "local-disk " + disk_size + " SSD"
@@ -78,11 +83,11 @@ task fastp_se {
   output {
     File read1_trimmed = "~{samplename}_1P.fastq.gz"
     File fastp_stats = "~{samplename}_fastp.html"
-    String version = "~{docker}"
+    String fastp_docker_image = "~{docker}"
     String pipeline_date = read_string("DATE")
   }
   runtime {
-    docker: "quay.io/staphb/fastp:0.23.2"
+    docker: docker
     memory: "8 GB"
     cpu: 4
     disks: "local-disk " + disk_size + " SSD"

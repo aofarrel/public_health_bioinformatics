@@ -9,6 +9,7 @@ task read_filtering { # in use
     Int max_length = 700
     Int cpu = 8
     Int disk_size = 100
+    String docker = "quay.io/staphb/artic-ncov2019:1.3.0-medaka-1.4.3"
   }
   command <<<
     # date and version control
@@ -22,11 +23,11 @@ task read_filtering { # in use
     File filtered_reads = "~{run_prefix}_~{samplename}.fastq"
   }
   runtime {
-    docker: "quay.io/staphb/artic-ncov2019:1.3.0-medaka-1.4.3"
+    docker: docker
     memory: "16 GB"
     cpu: cpu
-    disks:  "local-disk " + disk_size + " SSD"
-    disk: disk_size + " GB" # TES
+    disks: "local-disk " + disk_size + " SSD"
+    disk: disk_size + " GB"
     preemptible: 0
     maxRetries: 3
   }
