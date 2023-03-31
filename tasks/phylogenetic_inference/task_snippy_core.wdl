@@ -47,7 +47,7 @@ task snippy_core {
    String snippy_docker_image = docker
   }
   runtime {
-    docker: "~{docker}"
+    docker: docker
     memory: "8 GB"
     cpu: 4
     disks: "local-disk 100 SSD"

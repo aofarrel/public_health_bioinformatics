@@ -47,7 +47,7 @@ task ectyper {
     String ectyper_version = read_string("VERSION")
   }
   runtime {
-    docker: "~{docker}"
+    docker: docker
     memory: "8 GB"
     cpu: cpu
     disks: "local-disk " + disk_size + " SSD"
