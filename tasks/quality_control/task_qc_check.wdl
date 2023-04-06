@@ -30,7 +30,7 @@ task qc_check {
     Int disk_size = 100
   }
   command <<<
-    # date 
+    # date control
     date | tee DATE
 
     python3 <<CODE

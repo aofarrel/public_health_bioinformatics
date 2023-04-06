@@ -17,7 +17,7 @@ task consensus_qc {
       GENOME_LEN=29903
     fi 
 
-    # capture date and version
+    # date and version control
     date | tee DATE
 
     num_N=$( grep -v ">" ~{assembly_fasta} | grep -o 'N' | wc -l )

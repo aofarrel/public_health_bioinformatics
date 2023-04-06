@@ -12,10 +12,16 @@ task nanoq {
     Int min_read_qual = 10
   }
   command <<<
-    # capture date and version
+    # date and version control
     nanoq --version | grep nanoq | tee VERSION
 
-    nanoq -i ~{read1} --min-len ~{min_read_length} --max-len ~{max_read_length} --min-qual ~{min_read_qual} --max-qual ~{max_read_qual} -o ~{samplename}_read1.fastq.gz
+    nanoq \
+      -i ~{read1} \
+      --min-len ~{min_read_length} \
+      --max-len ~{max_read_length} \
+      --min-qual ~{min_read_qual} \
+      --max-qual ~{max_read_qual} \
+      -o ~{samplename}_read1.fastq.gz
   >>>
   output {
     File filtered_read1 = "${samplename}_read1.fastq.gz"

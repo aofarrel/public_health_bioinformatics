@@ -10,7 +10,7 @@ task fastq_scan_pe {
     String docker = "quay.io/biocontainers/fastq-scan:0.4.4--h7d875b9_1"
   }
   command <<<
-    # capture date and version
+    # date and version control
     date | tee DATE
     fastq-scan -v | tee VERSION
 
@@ -21,13 +21,13 @@ task fastq_scan_pe {
       cat_reads="cat"
     fi
 
-    # capture forward read stats
+    # extract forward read stats
     eval "${cat_reads} ~{read1}" | fastq-scan | tee ~{read1_name}_fastq-scan.json >(jq .qc_stats.read_total > READ1_SEQS)
     read1_seqs=$(cat READ1_SEQS)
     eval "${cat_reads} ~{read2}" | fastq-scan | tee ~{read2_name}_fastq-scan.json >(jq .qc_stats.read_total > READ2_SEQS)
     read2_seqs=$(cat READ2_SEQS)
 
-    # capture number of read pairs
+    # extract number of read pairs
     if [ "${read1_seqs}" == "${read2_seqs}" ]; then
       read_pairs=${read1_seqs}
     else
@@ -64,7 +64,7 @@ task fastq_scan_se {
     String docker = "quay.io/biocontainers/fastq-scan:0.4.4--h7d875b9_1"
   }
   command <<<
-    # capture date and version
+    # date and version control
     date | tee DATE
     fastq-scan -v | tee VERSION
 
@@ -75,7 +75,7 @@ task fastq_scan_se {
       cat_reads="cat"
     fi
 
-    # capture forward read stats
+    # extract forward read stats
     eval "${cat_reads} ~{read1}" | fastq-scan | tee ~{read1_name}_fastq-scan.json >(jq .qc_stats.read_total > READ1_SEQS)
   >>>
   output {

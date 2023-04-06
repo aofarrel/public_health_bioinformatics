@@ -15,23 +15,23 @@ task fastp_pe {
     Int threads = 4
   }
   command <<<
-    # date 
+    # date control
     date | tee DATE
 
     fastp \
-    --in1 ~{read1} \
-    --in2 ~{read2} \
-    --out1 ~{samplename}_1P.fastq.gz \
-    --out2 ~{samplename}_2P.fastq.gz \
-    --unpaired1 ~{samplename}_1U.fastq.gz \
-    --unpaired2 ~{samplename}_2U.fastq.gz \
-    --cut_right \
-    --cut_right_window_size ~{fastp_window_size} \
-    --cut_right_mean_quality ~{fastp_quality_trim_score} \
-    --length_required ~{fastp_minlen} \
-    --thread ~{threads} \
-    ~{fastp_args} \
-    --html ~{samplename}_fastp.html --json ~{samplename}_fastp.json
+      --in1 ~{read1} \
+      --in2 ~{read2} \
+      --out1 ~{samplename}_1P.fastq.gz \
+      --out2 ~{samplename}_2P.fastq.gz \
+      --unpaired1 ~{samplename}_1U.fastq.gz \
+      --unpaired2 ~{samplename}_2U.fastq.gz \
+      --cut_right \
+      --cut_right_window_size ~{fastp_window_size} \
+      --cut_right_mean_quality ~{fastp_quality_trim_score} \
+      --length_required ~{fastp_minlen} \
+      --thread ~{threads} \
+      ~{fastp_args} \
+      --html ~{samplename}_fastp.html --json ~{samplename}_fastp.json
   >>>
   output {
     File read1_trimmed = "~{samplename}_1P.fastq.gz"
@@ -72,13 +72,16 @@ task fastp_se {
     date | tee DATE
 
     fastp \
-    --in1 ~{read1} \
-    --out1 ~{samplename}_1P.fastq.gz \
-    --cut_right --cut_right_window_size ~{fastp_window_size} --cut_right_mean_quality ~{fastp_quality_trim_score} \
-    --length_required ~{fastp_minlen} \
-    --thread ~{threads} \
-    ~{fastp_args} \
-    --html ~{samplename}_fastp.html --json ~{samplename}_fastp.json
+      --in1 ~{read1} \
+      --out1 ~{samplename}_1P.fastq.gz \
+      --cut_right \
+      --cut_right_window_size ~{fastp_window_size} \
+      --cut_right_mean_quality ~{fastp_quality_trim_score} \
+      --length_required ~{fastp_minlen} \
+      --thread ~{threads} \
+      ~{fastp_args} \
+      --html ~{samplename}_fastp.html \
+      --json ~{samplename}_fastp.json
   >>>
   output {
     File read1_trimmed = "~{samplename}_1P.fastq.gz"

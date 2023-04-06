@@ -8,7 +8,7 @@ task quast {
     Int disk_size = 100
   }
   command <<<
-    # capture date and version
+    # date and version control
     date | tee DATE
     quast.py --version | grep QUAST | tee VERSION
 
@@ -32,8 +32,7 @@ task quast {
               n50_value.write(line[1])
           if "GC" in line[0]:
             with open("GC_PERCENT", 'wt') as gc_percent:
-              gc_percent.write(line[1])       
-
+              gc_percent.write(line[1])
     CODE
   >>>
   output {

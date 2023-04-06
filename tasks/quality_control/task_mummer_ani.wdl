@@ -10,7 +10,7 @@ task animummer {
     Int disk_size = 100
   }
   command <<<
-    # capture and version
+    # version control
     mummer --version | tee MUMMER_VERSION
 
     # set the reference genome
@@ -31,9 +31,9 @@ task animummer {
     # first does a mash check on relatedness between 2 genomes. If greater than mash_filter, then run dnadiff
     # --symmetric flag runs ANI on query vs. ref; followed by ref vs. query
     ani-m.pl --symmetric \
-             --mash-filter ~{mash_filter} \
-             ~{assembly} \
-             ${REF_GENOME} | tee ~{samplename}.ani-mummer.out.tsv
+      --mash-filter ~{mash_filter} \
+      ~{assembly} \
+      ${REF_GENOME} | tee ~{samplename}.ani-mummer.out.tsv
 
     # CHECK FOR A NEARLY BLANK TSV (ONLY HEADER LINE), mean sample did not surpass mash-filter and thus no ANI was run
     LINE_COUNT_OUTPUT_TSV=$(wc -l ~{samplename}.ani-mummer.out.tsv | cut -d ' ' -f 1)
