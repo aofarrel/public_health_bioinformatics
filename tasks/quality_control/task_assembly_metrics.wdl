@@ -8,6 +8,7 @@ task stats_n_coverage {
     String docker = "quay.io/staphb/samtools:1.15"
   }
   command <<<
+    # date and version control
     date | tee DATE
     samtools --version | head -n1 | tee VERSION
 

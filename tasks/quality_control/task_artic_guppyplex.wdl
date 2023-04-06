@@ -16,7 +16,11 @@ task read_filtering { # in use
     mkdir ~{samplename}
     cp ~{demultiplexed_reads} ~{samplename}/
     echo "DIRNAME: $(dirname)"
-    artic guppyplex --min-length ~{min_length} --max-length ~{max_length} --directory ~{samplename} --prefix ~{run_prefix}
+    artic guppyplex \
+      --min-length ~{min_length} \
+      --max-length ~{max_length} \
+      --directory ~{samplename} \
+      --prefix ~{run_prefix}
 
   >>>
   output {

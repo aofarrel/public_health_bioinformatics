@@ -25,15 +25,15 @@ task pirate {
 
   # run pirate on input gff
   PIRATE \
-  --input INPUT_DIR \
-  --output PIRATE \
-  ~{'--steps ' + steps} \
-  ~{'--features ' + features} \
-  ~{true="--nucl" false="" nucl} \
-  ~{true="--align" false="" align} \
-  ~{'--pan-opt ' + panopt} \
-  ~{'--threads ' + cpu} 
-   
+    --input INPUT_DIR \
+    --output PIRATE \
+    ~{'--steps ' + steps} \
+    ~{'--features ' + features} \
+    ~{true="--nucl" false="" nucl} \
+    ~{true="--align" false="" align} \
+    ~{'--pan-opt ' + panopt} \
+    ~{'--threads ' + cpu}
+
   # generate gene_presence_absence.csv
   PIRATE_to_roary.pl -i PIRATE/PIRATE.*.tsv -o ~{cluster_name}_gene_presence_absence.csv
   
