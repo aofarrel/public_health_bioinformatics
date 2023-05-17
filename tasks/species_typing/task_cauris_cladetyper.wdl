@@ -52,7 +52,6 @@ task cauris_cladetyper {
     else
       echo "None" > CLADEREF
     fi
-
   >>>
   output {
     String gambit_cladetype = read_string("CLADETYPE")

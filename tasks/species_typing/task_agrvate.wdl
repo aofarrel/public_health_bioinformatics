@@ -9,7 +9,6 @@ task agrvate {
     String samplename
     String docker = "quay.io/biocontainers/agrvate:1.0.2--hdfd78af_0"
     Int? cpu = 1
-
     # Parameters
     # --typing_only    agr typing only. Skips agr operon extraction and frameshift detection
     Boolean typing_only = false
@@ -17,8 +16,8 @@ task agrvate {
   command <<<
     echo $(agrvate -v 2>&1) | sed 's/agrvate v//;' | tee VERSION
     agrvate \
-        ~{true="--typing_only" false="" typing_only} \
-        -i $fasta_name
+      ~{true="--typing_only" false="" typing_only} \
+      -i $fasta_name
     cp results/~{samplename}-summary.tab ~{samplename}.tsv
     tar -czvf ~{samplename}.tar.gz results/
   >>>
